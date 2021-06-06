@@ -65,7 +65,7 @@ public class ServiceStudentTest {
         }
     
         @Test
-        public void getFruitTest() {
+        public void getStudentTest() {
             Assertions.assertThat(service.getStudentByName("Mateo")).get().hasFieldOrPropertyWithValue("name", "Mateo").hasFieldOrPropertyWithValue("dateBirth", LocalDate.parse("2005-06-05")).hasFieldOrPropertyWithValue("phone", "+34 666666666");
 
             // Test Student doesn't exist

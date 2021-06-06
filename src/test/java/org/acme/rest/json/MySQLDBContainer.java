@@ -2,7 +2,7 @@ package org.acme.rest.json;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-import org.testcontainers.containers.MySQLContainer
+import org.testcontainers.containers.MySQLContainer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class MySQLDBContainer {
             this.mySqlDBContainer= new MySQLContainer<>("mysql:latest").withDatabaseName("studentsdbtest")
             .withUsername("test")
             .withPassword("test")
-            .withExposedPorts(5432, 3005);
+            .withExposedPorts(3306, 3005);
 
             // withExposedPorts(): Nos permite exponer los puertos del contenedor DB. En realidad colocar el withExposedPorts -> 5432 es innecesario porque 5432 es el puerto por defecto de PostGreSQL. En cambio 3005 no, entonces si no queremos le estamos indicando que sea 5432 y 3005 los puertos expuestos a los que se pueden mapear.
 

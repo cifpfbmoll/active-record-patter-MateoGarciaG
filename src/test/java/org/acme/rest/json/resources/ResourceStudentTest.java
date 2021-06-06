@@ -7,7 +7,6 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import net.bytebuddy.asm.Advice.Local;
 
-import org.acme.rest.json.PostgresqlDBContainer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +24,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.core.MediaType;
 
 // @QuarkusTestResource para indicarle que use el TestContainers, pero al parecer Testcontainer ya lo aplica por defecto sin necesidad de llamarlo explicitamente
-// @QuarkusTestResource(PostgresqlDBContainer.Initializer.class)
+
 @Transactional
 @QuarkusTest
 public class ResourceStudentTest {
@@ -146,6 +145,19 @@ public class ResourceStudentTest {
             "surname", equalTo("Gomez"),
             "dateBirth", equalTo("2000-10-17"),
             "phone", equalTo("+34 688888888"));
+
+        // ROLLBACK to put the original Student
+        given()
+            .body("{\"name\": \"Mateo\", \"surname\": \"Alvarez\", \"dateBirth\": \"2005-06-05\", \"phone\": \"+34 666666666\"}")
+            .header("Content-Type", MediaType.APPLICATION_JSON)
+        .when()
+            .put("/students/put")
+        .then()
+            .contentType(ContentType.JSON)
+            .body("name", equalTo("Mateo"),
+            "surname", equalTo("Alvarez"),
+            "dateBirth", equalTo("2005-06-05"),
+            "phone", equalTo("+34 666666666"));
 
     }
 
