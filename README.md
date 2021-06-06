@@ -1,4 +1,4 @@
-# Rest-Json-Active-Record Project
+# Rest-Json-Active-Record Project with MySQL
 
 ## Getting Started
 Wellcome to my Project with Rest-Json API with Active Record Pattern with the Quarkus FrameWork related to Java. This project is 
