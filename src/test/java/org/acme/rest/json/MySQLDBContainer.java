@@ -2,24 +2,24 @@ package org.acme.rest.json;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.MySQLContainer
 
 import java.util.HashMap;
 import java.util.Map;
 
-@QuarkusTestResource(PostgresqlDBContainer.Initializer.class)
-public class PostgresqlDBContainer {
+@QuarkusTestResource(MySQLDBContainer.Initializer.class)
+public class MySQLDBContainer {
 
     public static class Initializer implements QuarkusTestResourceLifecycleManager {
         // Defines the test resource interface
 
         // Sets PostGreSQLDB container object
-        private PostgreSQLContainer postgresDBContainer;
+        private MySQLContainer mySqlDBContainer;
 
         @Override
         public Map<String, String> start() {
             // Instantiate PostGrSQLDB container with required Docker image
-            this.postgresDBContainer= new PostgreSQLContainer<>("postgres:latest").withDatabaseName("studentsdbtest")
+            this.mySqlDBContainer= new MySQLContainer<>("mysql:latest").withDatabaseName("studentsdbtest")
             .withUsername("test")
             .withPassword("test")
             .withExposedPorts(5432, 3005);
@@ -27,7 +27,7 @@ public class PostgresqlDBContainer {
             // withExposedPorts(): Nos permite exponer los puertos del contenedor DB. En realidad colocar el withExposedPorts -> 5432 es innecesario porque 5432 es el puerto por defecto de PostGreSQL. En cambio 3005 no, entonces si no queremos le estamos indicando que sea 5432 y 3005 los puertos expuestos a los que se pueden mapear.
 
             // Starts the container and waits until the container is accepting connections
-            this.postgresDBContainer.start();
+            this.mySqlDBContainer.start();
             return getConfigurationParameters();
         }
 
@@ -40,9 +40,9 @@ public class PostgresqlDBContainer {
             // Por lo cual el mapeo de ambos puertos es: 49287:5432 o 49287:3005
 
             // Mientras que con el Contenedor que genera TESTCONTAINERS para dockerizar la API, los puertos son: 49287:8080
-            conf.put("%test.quarkus.datasource.jdbc.url", this.postgresDBContainer.getJdbcUrl());
-            // conf.put("%test.quarkus.datasource.username", this.postgresDBContainer.getUsername());
-            // conf.put("%test.quarkus.datasource.password", this.postgresDBContainer.getPassword());
+            conf.put("%test.quarkus.datasource.jdbc.url", this.mySqlDBContainer.getJdbcUrl());
+            // conf.put("%test.quarkus.datasource.username", this.mySqlDBContainer.getUsername());
+            // conf.put("%test.quarkus.datasource.password", this.mySqlDBContainer.getPassword());
             
             // conf.put("quarkus.datasource.driver", this.mariaDBContainer.getDriverClassName());
             return conf;
@@ -51,8 +51,8 @@ public class PostgresqlDBContainer {
         @Override
         public void stop() {
             // Stops the container
-            if (this.postgresDBContainer != null) {
-                this.postgresDBContainer.close();
+            if (this.mySqlDBContainer != null) {
+                this.mySqlDBContainer.close();
             }
         }
     }
