@@ -36,6 +36,7 @@ https://github.com/dfleta/quarkus-active-record-pattern by @dfleta GitHub user
 ## Tabla de Contenidos
 
 1. [Tecnologías Usadas](#tecnologias-usadas)
+1. [Apuntes](#apuntes)
 1. [Reflexiones](#reflexiones)
 1. [Licencia](#licencia)
 1. [Detalles Quarkus](#detalles-quarkus)
@@ -51,7 +52,8 @@ https://github.com/dfleta/quarkus-active-record-pattern by @dfleta GitHub user
 - Git
 - Docker
 - Quarkus
-
+- Panache
+- TestContainers PostGreSQL
 
 
 **[⬆ back to top](#tabla-de-contenidos)**
@@ -59,9 +61,24 @@ https://github.com/dfleta/quarkus-active-record-pattern by @dfleta GitHub user
 
 ---
 
+## Apuntes
+
+### Execute DB PostGreSQL container
+```
+$ docker run -ti --rm -e POSTGRES_PASSWORD=develop -e  POSTGRES_USER=develop -e POSTGRES_DB=fruitsdb -p 3000:5432 postgres:latest
+```
+
+
+
+**[⬆ back to top](#tabla-de-contenidos)**
+
+---
+
 ## Reflexiones
 ### Que has mejorado con este proyecto?
-This Project has let me to learn how to 
+This Project has let me to learn how to create a simple API REST using Active Record Pattern, first of all I use the mayority of code from repository:
+
+Provided by @dfleta user which I used to learn and understand the concepts fo the pattern and how the test works. After I add new Entity with its test cases and the Service and Controller methods to learn the process from beginning until the end of how to create and API with active record pattern and the test cases
 
 **[⬆ back to top](#tabla-de-contenidos)**
 

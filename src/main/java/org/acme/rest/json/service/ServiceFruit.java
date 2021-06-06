@@ -1,10 +1,11 @@
 package org.acme.rest.json.service;
 
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.acme.rest.json.entities.Fruit;
 
 import javax.enterprise.context.ApplicationScoped;
+
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,11 +14,13 @@ import java.util.stream.Stream;
 /**
  * ServiceFruit Class which will contains methods to manipulate the Fruit Entity which have PanacheEntity methods and acts like a EntityManager by itself.
  */
+
 @ApplicationScoped
 public class ServiceFruit {
 
     public ServiceFruit() {
     }
+
 
     public Set<Fruit> list() {
         // It's a stream because after we can transform this stream into a SET collection.
@@ -33,13 +36,8 @@ public class ServiceFruit {
     }
 
     public void remove(String name) {
-        Optional<Fruit> fruit = Fruit.find("name", name).firstResultOptional();
-
-        if ((fruit.isPresent())) {
-            fruit.get().delete();
-        } else {
-            System.out.println("There is not a Fruit with that name");
-        }
+        Fruit fruit = Fruit.find("name", name).firstResult();
+        fruit.delete();
     }
 
     public Optional<Fruit> getFruit(String name) {

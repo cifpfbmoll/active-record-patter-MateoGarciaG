@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.Set;
 
+@Path("/fruits")
 public class ResourceFruit {
 
     @Inject
@@ -33,34 +34,40 @@ public class ResourceFruit {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
+    @Transactional
     // curl -w "\n" http://localhost:8080/fruits/helloworld
     // -H "Content-Type: application/x-www-form-urlencoded"
     // El "Content-Type: application/x-www-form-urlencoded" indica que es TEXT_PLAIN
     public String hello() {
-        return "Hello World";
+        return "Hello World Fruits";
+
+
     }
 
 
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     // no es necesario Produces ya que por defecto
     // resteasy jackson desactiva la negociación
     // y sirve MediaType.APPLICATION_JSON
     // curl -w "\n" http://localhost:8080/fruits/ -H "Content-Type: application/json"
-    public Set<Fruit> list() {
+    public Set<Fruit> listFruits() {
         return service.list();
     }
 
+    
     @POST
+    @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    // curl -d '{"name":"Banana", "description":"Brings a Gorilla too"}'
-    // -H "Content-Type: application/json" -X POST http://localhost:8080/fruits
-    public Set<Fruit> add(@Valid Fruit fruit) {
+    // curl -d '{"name":"Banana", "description":"Brings a Gorilla too"}' -H "Content-Type: application/json" -X POST http://localhost:8080/fruits/add
+    public Response add(@Valid Fruit fruit) {
         service.add(fruit);
-        return this.list();
+        // return Response.accepted(fruit).header("message", "The Fruit was add succesfully!!!").build();
+        return Response.ok(this.listFruits(), MediaType.APPLICATION_JSON_TYPE).header("message", "The Fruit was add succesfully!!!").build();
     }
 
     @DELETE
@@ -69,14 +76,16 @@ public class ResourceFruit {
     @Transactional
     // curl -d '{"name":"Banana", "description":"Brings a Gorilla too"}'
     // -H "Content-Type: application/json" -X DELETE http://localhost:8080/fruits
-    public Set<Fruit> delete(@Valid Fruit fruit) {
+    public Response delete(@Valid Fruit fruit) {
         service.remove(fruit.getName());
-        return list();
+        // ReUse list() method of ResourceFruit
+        return Response.ok(this.listFruits(), MediaType.APPLICATION_JSON).header("message", "The Fruit was deleted succesfully!!!").build();
     }
 
     @GET
     @Path("/{name}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     // curl -w "\n" http://localhost:8080/fruits/Apple -v
     // curl -w "\n" http://localhost:8080/fruits/jkl -v
     public Response get(@PathParam("name") String name) {

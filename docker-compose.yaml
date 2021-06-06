@@ -1,0 +1,60 @@
+version: '3.8'
+
+services: 
+    db:
+        image: postgres:latest
+        container_name: postgresdb_quarkus
+        environment:
+            # MARIADB_ROOT_PASSWORD: developer
+            # MARIADB_DATABASE: fruit
+            # MARIADB_USER: developer
+            # MARIADB_PASSWORD: developer
+            POSTGRES_PASSWORD: production
+            POSTGRES_USER: production
+            POSTGRES_DB: fruitsdb
+
+        ports:
+            - 3000:5432
+        networks:
+            backend: 
+                ipv4_address: 192.168.16.3
+                aliases: 
+                    - db
+    api:
+        build:
+            context: .
+            dockerfile: ./src/main/docker/Dockerfile.jvm
+        image: fruits:prod
+        container_name: fruits-api-prod
+        depends_on: 
+            - db
+        ports: 
+            - 8080:8080
+        networks: 
+            - backend
+                # ipv4_address: 172.17.0.3
+                # aliases: 
+                #     - api
+
+networks:
+    backend:
+        name: network-backend
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.16.0/16
+        
+# version: '3.7'
+
+# services: 
+#             hello_world:
+#                 image: hello-world:latest
+#                 networks: 
+#                     main_net:
+#                         ipv4_address: 172.20.0.255
+#         networks: 
+#             main_net:
+#                 name: main_network
+#                 ipam:
+#                     config:
+#                         - subnet: 172.20.0.0/16
